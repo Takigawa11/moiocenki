@@ -1315,7 +1315,7 @@ html[data-theme="dark"] .dot { background: #d4d4d4 !important; }
     text-align: center;
   }
 
-  .nav-item .icon { width: 20px; height: 20px; }
+  .nav-item .icon { width: 16px; height: 16px; }
 
   .view { padding: 20px 18px 92px; }
 
