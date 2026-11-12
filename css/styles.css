@@ -2,7 +2,9 @@
    Мои оценки — оформление
    ============================================================ */
 
-*, *::before, *::after { box-sizing: border-box; }
+*,
+*::before,
+*::after { box-sizing: border-box; }
 
 :root {
   --font: "Segoe UI", "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
@@ -286,7 +288,9 @@ html[data-theme="dark"] .brand-logo {
   font-weight: 650;
 }
 
-.semester-picker select:focus { box-shadow: none; }
+.semester-picker select:focus {
+  box-shadow: none;
+}
 
 .theme-switch {
   display: flex;
@@ -406,6 +410,63 @@ html[data-theme="dark"] .btn-danger { color: #0a0a0a; }
 .icon-btn .icon { width: 17px; height: 17px; }
 .icon-btn:hover { background: var(--surface-2); color: var(--text); }
 .icon-btn.danger:hover { background: var(--danger-soft); color: var(--danger); }
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.field > span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  letter-spacing: .01em;
+}
+
+.field > span em { font-style: normal; font-weight: 400; color: var(--muted); }
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+input, select, textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+input::placeholder { color: var(--muted); }
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-ring);
+}
+
+select {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 17px) 55%, calc(100% - 12px) 55%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 34px;
+  cursor: pointer;
+}
+
+input[type="date"] { cursor: pointer; }
+
+.form { display: flex; flex-direction: column; gap: 14px; }
+.form-actions { display: flex; gap: 10px; justify-content: flex-end; padding-top: 2px; }
 
 /* ---------- Общие блоки ---------- */
 
@@ -1154,6 +1215,44 @@ html[data-theme="dark"] .dot { background: #d4d4d4 !important; }
   pointer-events: none;
 }
 
+/* ---------- Баннер установки приложения (PWA) ---------- */
+
+.install-banner {
+  position: fixed;
+  left: 50%;
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 210;
+  width: min(540px, calc(100vw - 26px));
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 14px 14px 18px;
+  border-radius: 14px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+  animation: toast-in .28s cubic-bezier(.22, .8, .24, 1) both;
+}
+
+.install-banner[hidden] { display: none; }
+
+.install-banner-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.install-banner-text strong { font-size: 14px; font-weight: 700; }
+.install-banner-text span { font-size: 12px; color: var(--muted); }
+
+.install-banner-actions { margin-left: auto; display: flex; align-items: center; gap: 6px; flex: none; }
+.install-banner .btn { height: 36px; padding-inline: 14px; font-size: 13px; }
+
+@media (max-width: 680px) {
+  .install-banner {
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    gap: 10px;
+    padding: 12px 10px 12px 14px;
+  }
+  .install-banner-text span { display: none; }
+}
+
 .toast {
   display: flex;
   align-items: center;
@@ -1254,7 +1353,7 @@ html[data-theme="dark"] .dot { background: #d4d4d4 !important; }
     text-align: center;
   }
 
-  .nav-item .icon { width: 16px; height: 16px; }
+  .nav-item .icon { width: 20px; height: 20px; }
 
   .view { padding: 20px 18px 92px; }
 
@@ -1594,6 +1693,7 @@ body { background: var(--bg); }
   min-height: 74px;
   display: flex;
   flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 30px;
   padding: 12px max(24px, calc((100% - var(--layout-max)) / 2));
@@ -1620,9 +1720,12 @@ body { background: var(--bg); }
 
 .nav {
   display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 4px;
   min-width: 0;
+  margin-right: auto;
 }
 .nav-item {
   min-height: 38px;
@@ -1783,6 +1886,8 @@ body { background: var(--bg); }
 @media (max-width: 900px) {
   .sidebar { gap: 18px; padding-inline: 18px; }
   .sidebar-foot { display: none; }
+  .nav { margin-right: 0; overflow-x: visible; }
+  .brand-text { font-size: 15px; }
   .topbar, .view { padding-left: 18px; padding-right: 18px; }
   .hero { grid-template-columns: minmax(0, 1fr) 170px; }
   .hero-copy { padding: 24px; }
@@ -1790,11 +1895,11 @@ body { background: var(--bg); }
 }
 
 @media (max-width: 680px) {
-  .sidebar { min-height: 62px; gap: 14px; padding: 10px 13px; overflow-x: auto; }
+  .sidebar { min-height: 62px; gap: 10px; padding: 10px 13px; overflow-x: hidden; }
   .brand-text { display: none; }
   .brand-logo { width: 34px; height: 34px; }
-  .nav { flex: 1; overflow-x: auto; }
-  .nav-item { flex: none; padding-inline: 10px; }
+  .nav { flex: 1; justify-content: space-between; overflow-x: visible; }
+  .nav-item { flex: 1 1 0; justify-content: center; padding-inline: 4px; }
   .nav-item span { display: none; }
   .nav-item .icon { width: 19px; height: 19px; }
   .topbar { height: 64px; padding-inline: 13px; }

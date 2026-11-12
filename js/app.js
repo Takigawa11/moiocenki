@@ -332,8 +332,17 @@ function defaultSemesterId() {
 const initialSemester = semesterById(defaultSemesterId());
 const initialToday = todayISO();
 
+// Ярлык PWA (manifest.shortcuts) может открыть конкретный раздел: ?view=grades
+const initialView = (function () {
+  try {
+    const param = new URLSearchParams(location.search).get('view');
+    if (param && ['today', 'grades', 'semester', 'settings'].indexOf(param) !== -1) return param;
+  } catch (err) {}
+  return 'today';
+})();
+
 const ui = {
-  view: 'today',
+  view: initialView,
   subject: 'all',
   period: 'semester',
   day: initialToday >= initialSemester.start && initialToday <= initialSemester.end ? initialToday : initialSemester.start,
@@ -1616,6 +1625,67 @@ if (mq.addEventListener) {
 } else if (mq.addListener) {
   mq.addListener(function () {
     if (state.settings.theme === 'system') applyTheme();
+  });
+}
+
+/* ---------- Установка приложения (PWA) ---------- */
+
+let installPrompt = null;
+
+const installBanner = document.getElementById('installBanner');
+const installBtn = document.getElementById('installBtn');
+const installClose = document.getElementById('installClose');
+
+function isStandalone() {
+  return window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true;
+}
+
+function hideInstallBanner() {
+  if (installBanner) installBanner.hidden = true;
+}
+
+window.addEventListener('beforeinstallprompt', function (event) {
+  event.preventDefault();
+  installPrompt = event;
+  if (!isStandalone() && installBanner) installBanner.hidden = false;
+});
+
+window.addEventListener('appinstalled', function () {
+  installPrompt = null;
+  hideInstallBanner();
+});
+
+if (installBtn) {
+  installBtn.addEventListener('click', function () {
+    if (!installPrompt) return hideInstallBanner();
+    installPrompt.prompt();
+    installPrompt.userChoice.then(function () {
+      installPrompt = null;
+      hideInstallBanner();
+    });
+  });
+}
+
+if (installClose) {
+  installClose.addEventListener('click', function () {
+    hideInstallBanner();
+    try { localStorage.setItem('myGrades.installDismissed', '1'); } catch (err) {}
+  });
+}
+
+if (installBanner) {
+  try {
+    if (localStorage.getItem('myGrades.installDismissed') === '1') installBanner.hidden = true;
+  } catch (err) {}
+}
+
+// Не даём свайпу «назад» в standalone-режиме закрывать приложение случайно
+window.addEventListener('popstate', function () {});
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('./sw.js').catch(function () {});
   });
 }
 
