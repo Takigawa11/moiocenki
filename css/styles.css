@@ -1215,44 +1215,6 @@ html[data-theme="dark"] .dot { background: #d4d4d4 !important; }
   pointer-events: none;
 }
 
-/* ---------- Баннер установки приложения (PWA) ---------- */
-
-.install-banner {
-  position: fixed;
-  left: 50%;
-  bottom: calc(20px + env(safe-area-inset-bottom));
-  transform: translateX(-50%);
-  z-index: 210;
-  width: min(540px, calc(100vw - 26px));
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 14px 14px 14px 18px;
-  border-radius: 14px;
-  border: 1px solid var(--border-strong);
-  background: var(--surface);
-  box-shadow: var(--shadow-md);
-  animation: toast-in .28s cubic-bezier(.22, .8, .24, 1) both;
-}
-
-.install-banner[hidden] { display: none; }
-
-.install-banner-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.install-banner-text strong { font-size: 14px; font-weight: 700; }
-.install-banner-text span { font-size: 12px; color: var(--muted); }
-
-.install-banner-actions { margin-left: auto; display: flex; align-items: center; gap: 6px; flex: none; }
-.install-banner .btn { height: 36px; padding-inline: 14px; font-size: 13px; }
-
-@media (max-width: 680px) {
-  .install-banner {
-    bottom: calc(14px + env(safe-area-inset-bottom));
-    gap: 10px;
-    padding: 12px 10px 12px 14px;
-  }
-  .install-banner-text span { display: none; }
-}
-
 .toast {
   display: flex;
   align-items: center;
